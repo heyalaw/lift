@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,7 +18,7 @@
   body{padding:env(safe-area-inset-top) 0 calc(110px + env(safe-area-inset-bottom))}
   header{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
   .tabs,.days{display:flex;gap:6px}
-  .tabs button,.days button{flex:1;border:0;border-radius:10px;padding:9px 4px;background:var(--card);color:var(--dim);font:600 14px/1 inherit}
+  .tabs button,.days button{flex:1;border:0;border-radius:10px;padding:9px 4px;background:var(--card);color:var(--dim);font:600 14px/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
   .tabs button.on,.days button.on{background:var(--acc);color:#111}
   .days{margin-top:8px}
   main{padding:12px 16px}
@@ -28,16 +28,16 @@
   .last{color:var(--dim);font-size:13px;margin-top:6px}
   .fields{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
   .fields label{display:block;font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.04em}
-  .fields input{width:100%;margin-top:3px;padding:8px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--txt);font:600 17px/1 inherit;text-align:center}
+  .fields input{width:100%;margin-top:3px;padding:8px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--txt);font:600 17px/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;text-align:center}
   .sets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .set{min-width:52px;flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 4px;background:transparent;color:var(--txt);font:600 14px/1.1 inherit}
+  .set{min-width:52px;flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 4px;background:transparent;color:var(--txt);font:600 14px/1.1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
   .set.done{background:var(--ok);border-color:var(--ok);color:#0b2416}
   .set small{display:block;font-weight:500;font-size:11px;opacity:.75;margin-top:2px}
   #timer{position:fixed;left:0;right:0;bottom:0;z-index:10;background:#18181b;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
   #timer .row{display:flex;align-items:center;gap:8px}
   #tTime{flex:1;font:700 34px/1 ui-monospace,"SF Mono",monospace;font-variant-numeric:tabular-nums}
   #timer.go #tTime{color:var(--ok)}
-  #timer button{border:0;border-radius:10px;padding:12px 12px;background:var(--card);color:var(--txt);font:600 15px/1 inherit}
+  #timer button{border:0;border-radius:10px;padding:12px 12px;background:var(--card);color:var(--txt);font:600 15px/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
   #tBar{height:4px;background:var(--line);border-radius:2px;margin-bottom:8px;overflow:hidden}
   #tFill{height:100%;background:var(--acc);width:100%}
   .wk{display:grid;grid-template-columns:1.1fr 1.2fr 1fr .6fr;gap:4px;font-size:14px;padding:6px 0;border-top:1px solid var(--line)}
@@ -46,7 +46,7 @@
   .sum{display:flex;gap:12px}.sum div{flex:1;background:var(--card);border-radius:14px;padding:12px}
   .sum b{display:block;font-size:26px}.sum span{color:var(--dim);font-size:13px}
   .btns{display:flex;gap:8px;margin-top:8px}
-  .btns button,.btns label{flex:1;text-align:center;border:1px solid var(--line);border-radius:10px;padding:11px;background:transparent;color:var(--txt);font:600 14px/1 inherit}
+  .btns button,.btns label{flex:1;text-align:center;border:1px solid var(--line);border-radius:10px;padding:11px;background:transparent;color:var(--txt);font:600 14px/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
   .empty{color:var(--dim);text-align:center;padding:30px 0}
   h2{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px}
 </style>
