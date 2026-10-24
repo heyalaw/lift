@@ -1,0 +1,9 @@
+{
+  "name": "Lift",
+  "short_name": "Lift",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111113",
+  "theme_color": "#111113",
+  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png" }]
+}
