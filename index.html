@@ -14,6 +14,8 @@
 <style>
   :root{--bg:#111113;--card:#1c1c1f;--line:#2c2c31;--txt:#f2f2f2;--dim:#8d8d96;--acc:#ff8a3d;--ok:#3ddc84}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  input,button{font-size:17px;touch-action:manipulation}
+  html{-webkit-text-size-adjust:100%}
   html,body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
   body{padding:env(safe-area-inset-top) 0 calc(110px + env(safe-area-inset-bottom))}
   header{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 16px 8px;border-bottom:1px solid var(--line)}
@@ -150,10 +152,10 @@ function renderWorkout(){
       <h3>${e.name}</h3>${e.note?`<div class="note">${e.note}</div>`:''}
       ${lt?`<div class="last">${lt}</div>`:''}
       <div class="fields">
-        <label>Sets<input type="number" inputmode="numeric" data-ex="${e.id}" data-k="sets" value="${c.sets}"></label>
-        <label>${e.unit==='sec'?'Sec':'Reps'}<input type="number" inputmode="numeric" data-ex="${e.id}" data-k="reps" value="${c.reps}"></label>
-        <label>Lb<input type="number" inputmode="decimal" data-ex="${e.id}" data-k="w" value="${c.w}"></label>
-        <label>Rest s<input type="number" inputmode="numeric" data-ex="${e.id}" data-k="rest" value="${c.rest}"></label>
+        <label>Sets<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="sets" value="${c.sets}"></label>
+        <label>${e.unit==='sec'?'Sec':'Reps'}<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="reps" value="${c.reps}"></label>
+        <label>Lb<input type="text" autocomplete="off" inputmode="decimal" data-ex="${e.id}" data-k="w" value="${c.w}"></label>
+        <label>Rest s<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="rest" value="${c.rest}"></label>
       </div>
       <div class="sets">${chips}</div></div>`;
   }).join('');
@@ -191,6 +193,12 @@ function renderProgress(){
 $('tabW').onclick=()=>{view='w';render()};
 $('tabP').onclick=()=>{view='p';render()};
 $('days').onclick=ev=>{const b=ev.target.closest('[data-day]');if(b){day=b.dataset.day;render();scrollTo(0,0)}};
+$('app').addEventListener('focusin',ev=>{ // select the whole number on tap so typing replaces it
+  const i=ev.target; if(!i.dataset||!i.dataset.k) return;
+  const sel=()=>{try{i.setSelectionRange(0,i.value.length)}catch(e){i.select()}};
+  sel(); setTimeout(sel,0); setTimeout(sel,60);
+});
+$('app').addEventListener('keydown',ev=>{if(ev.key==='Enter'&&ev.target.dataset.k)ev.target.blur()});
 $('app').addEventListener('change',ev=>{
   const i=ev.target;
   if(i.id==='imp'){const f=i.files[0];if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(d.logs&&d.cfg&&confirm('Replace current data with this backup?')){S=d;save();render()}}catch(e){alert('Not a valid backup file')}});return}
