@@ -80,6 +80,9 @@ const PLAN = [
     ['rdl','DB Romanian deadlift',3,10,120],
     ['bss','Bulgarian split squat',3,8,90,'Rear foot on bench. Reps per leg'],
     ['calf','Calf raise',3,15,60],
+    ['shrug','DB shrug',3,12,60,'Straight up, hold 1 sec, no rolling'],
+    ['neckcurl','Lying neck curl',2,15,60,'Face-up, head off bench, towel + light DB on forehead. Slow'],
+    ['neckext','Lying neck extension',2,15,60,'Face-down, light DB on back of head. Slow'],
     ['hlr','Hanging knee/leg raise',3,10,60]]},
   {id:'ub', name:'Upper B', ex:[
     ['chinup','Chin-ups',3,6,120,'Palms facing you. Weight = added weight'],
@@ -94,6 +97,9 @@ const PLAN = [
     ['thrust','Hip thrust',3,12,90,'Shoulders on bench'],
     ['slrdl','Single-leg RDL',3,10,90,'Reps per leg'],
     ['calf','Calf raise',3,15,60],
+    ['shrug','DB shrug',3,12,60,'Straight up, hold 1 sec, no rolling'],
+    ['neckcurl','Lying neck curl',2,15,60,'Face-up, head off bench, towel + light DB on forehead. Slow'],
+    ['neckext','Lying neck extension',2,15,60,'Face-down, light DB on back of head. Slow'],
     ['plank','Plank',3,30,60,'',"sec"]]}
 ].map(d=>({...d, ex:d.ex.map(([id,name,sets,reps,rest,note='',unit='reps'])=>({id,name,sets,reps,rest,note,unit}))}));
 
