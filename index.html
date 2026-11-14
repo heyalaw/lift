@@ -50,6 +50,18 @@
   .btns{display:flex;gap:8px;margin-top:8px}
   .btns button,.btns label{flex:1;text-align:center;border:1px solid var(--line);border-radius:10px;padding:11px;background:transparent;color:var(--txt);font:600 14px/1 -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
   .empty{color:var(--dim);text-align:center;padding:30px 0}
+  .cal{background:var(--card);border-radius:14px;padding:12px;margin-top:12px}
+  .calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .calhd b{font-size:16px}.calhd span{color:var(--dim);font-size:13px;margin-left:6px;font-weight:500}
+  .calhd button{border:0;background:var(--bg);color:var(--txt);border-radius:8px;width:36px;height:32px;font-size:16px}
+  .calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+  .calg .dw{color:var(--dim);font-size:11px;padding-bottom:2px}
+  .calg .d{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:13px;color:var(--dim)}
+  .calg .d.up{background:var(--acc);color:#111;font-weight:700}
+  .calg .d.lo{background:#5aa9ff;color:#111;font-weight:700}
+  .calg .d.td{outline:2px solid var(--txt);outline-offset:-2px}
+  .calk{display:flex;gap:14px;margin-top:8px;font-size:12px;color:var(--dim)}
+  .calk i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
   h2{font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin:18px 0 8px}
 </style>
 </head>
@@ -162,9 +174,31 @@ function renderWorkout(){
   }).join('');
 }
 
+let calOff=0; // months back from current
+function calendar(){
+  const now=new Date(), m=new Date(now.getFullYear(),now.getMonth()-calOff,1);
+  const y=m.getFullYear(), mo=m.getMonth(), days=new Date(y,mo+1,0).getDate(), lead=(m.getDay()+6)%7;
+  const byDay={}; S.logs.forEach(l=>{(byDay[l.d]=byDay[l.d]||new Set()).add(l.day)});
+  let count=0, cells='';
+  ['M','T','W','T','F','S','S'].forEach(x=>cells+=`<div class="dw">${x}</div>`);
+  for(let i=0;i<lead;i++) cells+='<div></div>';
+  for(let d=1;d<=days;d++){
+    const k=ymd(new Date(y,mo,d)), set=byDay[k];
+    let c='d';
+    if(set){count++; c+=[...set].some(x=>x[0]==='u')?' up':' lo';}
+    if(k===today()) c+=' td';
+    cells+=`<div class="${c}">${d}</div>`;
+  }
+  const name=m.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+  return `<div class="cal"><div class="calhd"><button id="calPrev">‹</button><b>${name}<span>${count} workout${count===1?'':'s'}</span></b><button id="calNext" ${calOff?'':'disabled style="opacity:.3"'}>›</button></div>
+    <div class="calg">${cells}</div>
+    <div class="calk"><span><i style="background:var(--acc)"></i>Upper</span><span><i style="background:#5aa9ff"></i>Lower</span></div></div>`;
+}
+
 function renderProgress(){
   const wk=weekOf(today()), mine=S.logs.filter(l=>weekOf(l.d)===wk);
   let h=`<div class="sum"><div><b>${new Set(mine.map(l=>l.d)).size}</b><span>workouts this week</span></div><div><b>${mine.length}</b><span>sets this week</span></div></div>`;
+  h+=calendar();
   const seen=new Set(), list=[];
   PLAN.forEach(p=>p.ex.forEach(e=>{if(!seen.has(e.id)){seen.add(e.id);list.push(e)}}));
   let any=false;
@@ -209,6 +243,8 @@ $('app').addEventListener('change',ev=>{
   render();
 });
 $('app').addEventListener('click',ev=>{
+  if(ev.target.id==='calPrev'){calOff++;render();return}
+  if(ev.target.id==='calNext'){if(calOff>0){calOff--;render()}return}
   if(ev.target.id==='exp'){
     const blob=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');
     a.href=URL.createObjectURL(blob);a.download=`lift-backup-${today()}.json`;a.click();return;
