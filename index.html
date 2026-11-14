@@ -87,7 +87,9 @@ const PLAN = [
     ['row1','One-arm DB row',3,10,90,'Reps per side'],
     ['ohp','Seated DB shoulder press',3,10,90,'Bench at ~80°'],
     ['lateral','Lateral raise',3,12,60],
-    ['inccurl','Incline DB curl',3,10,60]]},
+    ['inccurl','Incline DB curl',3,10,60],
+    ['revcurl','Reverse curl',2,12,60,'Palms down. Top of forearm'],
+    ['wristcurl','Wrist curl',2,15,45,'Forearms on bench, palms up']]},
   {id:'la', name:'Lower A', ex:[
     ['rdl','DB Romanian deadlift',3,10,120],
     ['bss','Bulgarian split squat',3,8,90,'Rear foot on bench. Reps per leg'],
@@ -95,6 +97,7 @@ const PLAN = [
     ['shrug','DB shrug',3,12,60,'Straight up, hold 1 sec, no rolling'],
     ['neckcurl','Lying neck curl',2,15,60,'Face-up, head off bench, towel + light DB on forehead. Slow'],
     ['neckext','Lying neck extension',2,15,60,'Face-down, light DB on back of head. Slow'],
+    ['dbhold','Heavy DB hold',2,45,60,'Hold at your sides. Weight = per hand','sec'],
     ['hlr','Hanging knee/leg raise',3,10,60]]},
   {id:'ub', name:'Upper B', ex:[
     ['chinup','Chin-ups',3,6,120,'Palms facing you. Weight = added weight'],
@@ -103,6 +106,7 @@ const PLAN = [
     ['incfly','Incline DB fly',3,12,60],
     ['reardelt','Rear-delt fly',3,15,60,'Face-down on incline'],
     ['lateral','Lateral raise',3,12,60],
+    ['hammer','Hammer curl',2,12,60],
     ['skull','DB skull crusher',3,10,60]]},
   {id:'lb', name:'Lower B', ex:[
     ['goblet','Heels-elevated DB squat',3,12,120,'DBs at your sides, heels on a 1–2" lift. Weight = per hand'],
@@ -112,6 +116,7 @@ const PLAN = [
     ['shrug','DB shrug',3,12,60,'Straight up, hold 1 sec, no rolling'],
     ['neckcurl','Lying neck curl',2,15,60,'Face-up, head off bench, towel + light DB on forehead. Slow'],
     ['neckext','Lying neck extension',2,15,60,'Face-down, light DB on back of head. Slow'],
+    ['dbhold','Heavy DB hold',2,45,60,'Hold at your sides. Weight = per hand','sec'],
     ['plank','Plank',3,30,60,'',"sec"]]}
 ].map(d=>({...d, ex:d.ex.map(([id,name,sets,reps,rest,note='',unit='reps'])=>({id,name,sets,reps,rest,note,unit}))}));
 
