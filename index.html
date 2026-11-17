@@ -123,6 +123,14 @@ const PLAN = [
 const KEY='lift-v1';
 let S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.logs) S={cfg:{},logs:[]};
+// one-time fix: goblet squat (one DB) was swapped for DB squat (per hand) under the same id on 2026-11-08.
+// Move the old goblet sets to their own id and clear the carried-over weight.
+if(!S.mig1){
+  S.logs.forEach(l=>{if(l.ex==='goblet'&&l.d<'2026-11-16') l.ex='gobletOld'});
+  if(S.cfg.goblet) delete S.cfg.goblet.w;
+  S.mig1=1;
+  try{localStorage.setItem('lift-v1',JSON.stringify(S))}catch(e){}
+}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const cfg=e=>({sets:e.sets,reps:e.reps,w:0,rest:e.rest,...(S.cfg[e.id]||{})});
 const setCfg=(id,k,v)=>{(S.cfg[id]=S.cfg[id]||{})[k]=v;save()};
