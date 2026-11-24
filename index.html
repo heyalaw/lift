@@ -218,8 +218,8 @@ function renderWorkout(){
       ${lt?`<div class="last">${lt}</div>`:''}
       <div class="fields">
         <label>Sets<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="sets" value="${c.sets}"></label>
-        <label>${e.unit==='sec'?'Sec':'Reps'}<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="reps" value="${c.reps}"></label>
         <label>Lb<input type="text" autocomplete="off" inputmode="decimal" data-ex="${e.id}" data-k="w" value="${c.w}"></label>
+        <label>${e.unit==='sec'?'Sec':'Reps'}<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="reps" value="${c.reps}"></label>
         <label>Rest s<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="rest" value="${c.rest}"></label>
       </div>
       <div class="sets">${chips}</div></div>`;
