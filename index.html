@@ -25,7 +25,14 @@
   .days{margin-top:8px}
   main{padding:12px 16px}
   .card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px}
+  .card{position:relative}
+  .card .hd{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .card h3{margin:0;font-size:17px}
+  .info{flex:none;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--dim);background:transparent;color:var(--dim);font:italic 700 14px/1 Georgia,serif;padding:0;display:flex;align-items:center;justify-content:center}
+  .info.on{border-color:var(--acc);color:var(--acc)}
+  .range{color:var(--acc);font-size:13px;font-weight:600;margin-top:3px}
+  .tip{position:absolute;right:10px;top:46px;z-index:4;max-width:min(300px,calc(100% - 20px));background:#2a2a30;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.4;color:var(--txt);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  .tip:before{content:'';position:absolute;top:-7px;right:8px;width:12px;height:12px;background:#2a2a30;border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
   .note{color:var(--dim);font-size:13px;margin-top:2px}
   .last{color:var(--dim);font-size:13px;margin-top:6px}
   .fields{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
@@ -119,6 +126,37 @@ const PLAN = [
     ['plank','Plank',3,30,60,'',"sec"]]}
 ].map(d=>({...d, ex:d.ex.map(([id,name,sets,reps,rest,note='',unit='reps'])=>({id,name,sets,reps,rest,note,unit}))}));
 
+// rep range [low, high] and how-to description per exercise
+const INFO={
+  incpress:[6,10,'Bench at 30°. Lower the dumbbells to upper-chest level with elbows about 45° from your body, then press up and slightly together. Weight = per hand.'],
+  pullup:[5,10,'Overhand grip, a bit wider than shoulders. Pull your chest toward the bar, then lower all the way under control. Weight = added weight. Finish with slow negatives if you can\'t hit the reps.'],
+  row1:[8,12,'One hand and knee on the bench, back flat. Pull the dumbbell toward your hip, squeeze your shoulder blade back, lower slowly. Reps per side.'],
+  ohp:[8,12,'Bench at about 80°, back against the pad. Press the dumbbells overhead without arching your lower back, then lower to about ear level. Weight = per hand.'],
+  lateral:[12,20,'Slight bend in the elbows. Raise the dumbbells out to the sides to shoulder height, leading with your elbows, then lower slowly. No swinging.'],
+  yraise:[12,15,'Lie face-down on an incline bench. Thumbs up, raise light dumbbells overhead in a Y using your upper back. Don\'t shrug. 2–5 lb.'],
+  inccurl:[10,15,'Lean back on an incline bench with arms hanging straight. Curl without letting your elbows drift forward, then lower all the way.'],
+  revcurl:[12,20,'Palms facing down. Curl the dumbbells up keeping your wrists straight. Works the top of the forearm.'],
+  wristcurl:[12,20,'Forearms on the bench, palms up, wrists off the edge. Let the dumbbell roll to your fingertips, then curl your wrists up.'],
+  rdl:[8,12,'Soft knees held still. Push your hips back with a flat back and the dumbbells sliding down your legs until you feel a strong hamstring stretch, then drive your hips forward. Weight = per hand.'],
+  bss:[8,12,'Rear foot on the bench. Lower straight down until your back knee is just off the floor, lean slightly forward for more glutes, and drive up through the front heel. Reps per leg.'],
+  calf:[12,20,'Balls of your feet on a step. Lower your heels as far as possible and pause 2 sec in the stretch, then rise all the way up. No bouncing.'],
+  shrug:[12,15,'Heavy dumbbells at your sides. Lift your shoulders straight up toward your ears, hold 1 sec, lower slowly. No rolling.'],
+  neckcurl:[15,25,'Lie face-up with your head off the end of the bench, light weight on your forehead over a towel. Lower your head back, then tuck your chin to your chest. Slow, no jerking.'],
+  neckext:[15,25,'Seated with a harness, torso leaned forward ~45°, hands on thighs. Lower your chin toward your chest, then raise your head in line with your torso. Slow, stop 2–3 reps short of failure.'],
+  hlr:[10,15,'Hang from the bar. Raise your knees (or straight legs) toward your chest by curling your pelvis up, then lower slowly without swinging.'],
+  chinup:[5,10,'Palms facing you, shoulder-width grip. Pull your chest toward the bar, lower all the way under control. Weight = added weight.'],
+  csrow:[8,12,'Lie face-down on a 30–45° incline. Row the dumbbells toward your lower ribs, squeeze your shoulder blades together, lower slowly. Weight = per hand.'],
+  declpush:[8,15,'Feet on the bench, hands slightly wider than shoulders. Lower your chest to the floor with a straight body, then push up.'],
+  incfly:[10,15,'Bench at about 30°. Slight bend in the elbows, open your arms wide until you feel a chest stretch, then bring the dumbbells together over your chest.'],
+  reardelt:[12,20,'Lie face-down on an incline. Raise light dumbbells out to the sides with slightly bent elbows, squeezing the back of your shoulders. Don\'t shrug.'],
+  hammer:[10,15,'Palms facing each other. Curl without swinging, keeping elbows at your sides. Works the forearm and brachialis.'],
+  skull:[10,15,'Lie on the bench, dumbbells over your shoulders. Bend only at the elbows to lower the weights beside your head, then extend back up.'],
+  goblet:[10,15,'Dumbbells at your sides, heels on a 1–2" lift. Sit straight down with your chest up until thighs are at least parallel, then stand. Weight = per hand.'],
+  lunge:[8,12,'Front foot on a 2–4" lift. Step back into a deep lunge, lean slightly forward, and drive up through the front heel. Reps per leg.'],
+  slrdl:[8,12,'Stand on one leg with a soft knee, dumbbell in the opposite hand. Hinge forward as your free leg extends behind you, keeping hips level, until you feel the stretch. Reps per leg.'],
+  plank:[30,60,'Forearms under shoulders, body in a straight line. Squeeze your glutes and brace your abs. Don\'t let your hips sag.']
+};
+
 const KEY='lift-v1';
 let S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.logs) S={cfg:{},logs:[]};
@@ -139,7 +177,7 @@ const nice=s=>new Date(s+'T12:00').toLocaleDateString(undefined,{month:'short',d
 const weekOf=s=>{const d=new Date(s+'T12:00');d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d)};
 const $=id=>document.getElementById(id);
 
-let view='w';
+let view='w', openTip=null;
 let day=(()=>{ // next day after the last one logged
   const last=S.logs.filter(l=>l.d<today()).sort((a,b)=>a.d<b.d?-1:1).pop();
   const done=S.logs.find(l=>l.d===today());
@@ -174,7 +212,9 @@ function renderWorkout(){
     }
     const lt=lastTime(e.id);
     return `<div class="card">
-      <h3>${e.name}</h3>${e.note?`<div class="note">${e.note}</div>`:''}
+      <div class="hd"><h3>${e.name}</h3>${(INFO[e.id]||e.note)?`<button class="info${openTip===e.id?' on':''}" data-tip="${e.id}" aria-label="How to do it">i</button>`:''}</div>
+      ${INFO[e.id]?`<div class="range">Range: ${INFO[e.id][0]}–${INFO[e.id][1]} ${e.unit==='sec'?'sec':'reps'}</div>`:''}
+      ${openTip===e.id?`<div class="tip">${INFO[e.id]?INFO[e.id][2]:e.note}</div>`:''}
       ${lt?`<div class="last">${lt}</div>`:''}
       <div class="fields">
         <label>Sets<input type="text" autocomplete="off" inputmode="numeric" data-ex="${e.id}" data-k="sets" value="${c.sets}"></label>
@@ -239,7 +279,7 @@ function renderProgress(){
 // events
 $('tabW').onclick=()=>{view='w';render()};
 $('tabP').onclick=()=>{view='p';render()};
-$('days').onclick=ev=>{const b=ev.target.closest('[data-day]');if(b){day=b.dataset.day;render();scrollTo(0,0)}};
+$('days').onclick=ev=>{const b=ev.target.closest('[data-day]');if(b){day=b.dataset.day;openTip=null;render();scrollTo(0,0)}};
 $('app').addEventListener('focusin',ev=>{ // select the whole number on tap so typing replaces it
   const i=ev.target; if(!i.dataset||!i.dataset.k) return;
   const sel=()=>{try{i.setSelectionRange(0,i.value.length)}catch(e){i.select()}};
@@ -255,6 +295,9 @@ $('app').addEventListener('change',ev=>{
   render();
 });
 $('app').addEventListener('click',ev=>{
+  const tb=ev.target.closest('[data-tip]');
+  if(tb){openTip=openTip===tb.dataset.tip?null:tb.dataset.tip;render();return}
+  if(openTip&&!ev.target.closest('.tip')){openTip=null;render();if(!ev.target.closest('.set,input'))return}
   if(ev.target.id==='calPrev'){calOff++;render();return}
   if(ev.target.id==='calNext'){if(calOff>0){calOff--;render()}return}
   if(ev.target.id==='exp'){
